@@ -1,5 +1,7 @@
 package com.springrest.springrest.services;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,7 @@ public class SmallestNextAvailableNumberService {
         return sum;
     }
     
-    public CategoryValues getValue(String cc) {
+    public CategoryValues getCategoryValue(String cc) {
     	return (CategoryValues) categoryRepository.findByCategoryCode(cc);
     }
     
@@ -51,9 +53,14 @@ public class SmallestNextAvailableNumberService {
     
     
     public int getResponseValue(String cc) {
-    	CategoryValues cvFromDb = getValue(cc);
-    	int newVal = getNextSmallestNumber(cvFromDb.getValue());
-    	updateValue(cc, newVal);    	
+    	CategoryValues cvFromDb = getCategoryValue(cc);
+    	
+    	int newVal = 0;
+    	if(!Objects.isNull(cvFromDb)) {
+    		newVal = getNextSmallestNumber(cvFromDb.getValue());
+    		updateValue(cc, newVal);    
+    	}
+    		
     	return newVal;
     }
 }
